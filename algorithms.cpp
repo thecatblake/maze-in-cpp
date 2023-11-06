@@ -26,3 +26,26 @@ Grid& binary_tree(Grid& grid) {
 
     return grid;
 }
+
+Grid& sidewinder(Grid& grid) {
+    std::random_device r;
+    std::default_random_engine generator(r());
+    std::uniform_int_distribution<int> dist(0, (int)grid.cells.size());
+    std::vector<Cell*> run;
+    for(auto & cell : grid.cells) {
+        run.push_back(cell);
+        bool at_eastern_boundary = cell->east == nullptr;
+        bool at_northern_boundary = cell->north == nullptr;
+        bool should_close_out = at_eastern_boundary || (!at_northern_boundary && dist(generator) % 2 == 0);
+
+        if (should_close_out) {
+            Cell* member = run[dist(generator) % run.size()];
+            if (member->north) member->link(member->north);
+            run.erase(run.begin(), run.end());
+        } else {
+            cell->link(cell->east);
+        }
+    }
+
+    return grid;
+}

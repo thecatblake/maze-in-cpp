@@ -8,5 +8,6 @@
 #include "Grid.h"
 
 Grid& binary_tree(Grid& grid);
+Grid& sidewinder(Grid& grid);
 
 #endif //MAZE_IN_CPP_ALGORITHMS_H

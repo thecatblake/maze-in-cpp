@@ -14,3 +14,5 @@ add_library(maze
 
 add_executable(binary_tree_maze binary_tree_maze.cpp)
 target_link_libraries(binary_tree_maze maze)
+add_executable(sidewinder_maze sidewinder_maze.cpp)
+target_link_libraries(sidewinder_maze maze)
