@@ -6,6 +6,7 @@
 #define MAZE_IN_CPP_DISTANCES_H
 
 #include <unordered_map>
+#include "Cell.h"
 
 class Cell;
 
@@ -14,6 +15,7 @@ public:
     Distances(Cell* cell);
     int& operator[](Cell* cell);
     bool calculated(Cell* cell);
+    Distances* pathTo(Cell* cell);
     std::unordered_map<Cell*, int> cells;
 private:
     Cell* root;

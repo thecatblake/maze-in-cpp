@@ -10,6 +10,8 @@
 #include <deque>
 #include "Distances.h"
 
+class Distances;
+
 class Cell {
 public:
     Cell(int row, int column);

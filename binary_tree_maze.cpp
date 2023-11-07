@@ -18,4 +18,8 @@ int main() {
     grid.toPng(file_name, 10);
 
     std::cout << grid.toString() << std::endl;
+
+    grid.distances = grid.distances->pathTo(grid.getCell(grid.rows - 1, 0));
+
+    std::cout << grid.toString() << std::endl;
 }
