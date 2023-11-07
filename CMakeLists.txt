@@ -13,6 +13,10 @@ add_library(maze
         Cell.h
         algorithms.cpp
         algorithms.h
+        Distances.cpp
+        Distances.h
+        DistanceGrid.cpp
+        DistanceGrid.h
 )
 target_link_libraries(maze libpng.a)
 add_executable(binary_tree_maze binary_tree_maze.cpp)

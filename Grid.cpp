@@ -58,7 +58,7 @@ std::string Grid::toString() {
         std::string bottom = "+";
         for(int column=0; column < columns; column++) {
             Cell* cell = getCell(row, column);
-            std::string body = "   ";
+            std::string body = " " + content_of(cell) + " ";
             std::string east_boundary = cell->linked(cell->east) ? " " : "|";
             top += body + east_boundary;
 
@@ -158,4 +158,8 @@ void Grid::toPng(char* file_name, int cell_size) {
     fclose(fp);
 
     png_destroy_write_struct(&png, &info);
+}
+
+std::string Grid::content_of(Cell *cell) {
+    return " ";
 }

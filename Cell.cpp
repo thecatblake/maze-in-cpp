@@ -43,3 +43,25 @@ std::vector<Cell *> Cell::neighbors() {
 
     return xs;
 }
+
+Distances *Cell::distances() {
+    auto ds = new Distances(this);
+
+    std::vector<Cell*> q = {this};
+
+    while(!q.empty()) {
+        std::vector<Cell*> new_q;
+
+        for(auto & cell : q) {
+            for( auto & linked : cell->links) {
+                if(ds->calculated(linked))
+                    continue;
+                ds->cells[linked] = ds->cells[cell] + 1;
+                new_q.push_back(linked);
+            }
+        }
+        q = new_q;
+    }
+
+    return ds;
+}

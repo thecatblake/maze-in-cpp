@@ -20,7 +20,8 @@ public:
     std::vector<Cell*> cells;
     std::string toString();
     void toPng(char* file_name, int cell_size);
-private:
+protected:
+    virtual std::string content_of(Cell* cell);
     int rows;
     int columns;
     std::default_random_engine _generator;

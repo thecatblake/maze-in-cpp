@@ -7,6 +7,8 @@
 
 #include <set>
 #include <vector>
+#include <deque>
+#include "Distances.h"
 
 class Cell {
 public:
@@ -14,6 +16,7 @@ public:
     Cell* link(Cell* cell, bool bidi=true);
     Cell* unlink(Cell* cell, bool bidi=true);
     bool linked(Cell* cell);
+    Distances* distances();
     std::vector<Cell*> neighbors();
     std::set<Cell*> links;
     Cell* north;

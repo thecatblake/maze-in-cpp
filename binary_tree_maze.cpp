@@ -4,12 +4,14 @@
 
 #include <iostream>
 #include "Grid.h"
+#include "DistanceGrid.h"
 #include "algorithms.h"
 
 
 int main() {
-    Grid grid(30, 30);
+    DistanceGrid grid(10, 10);
     binary_tree(grid);
+    grid.distances = grid.cells[0]->distances();
 
     char* file_name = "binary_tree_maze.png";
 
