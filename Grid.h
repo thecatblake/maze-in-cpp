@@ -8,6 +8,7 @@
 #include <utility>
 #include <random>
 #include "Cell.h"
+#include <png.h>
 
 class Grid {
 public:
@@ -18,6 +19,7 @@ public:
     Cell* randomCell();
     std::vector<Cell*> cells;
     std::string toString();
+    void toPng(char* file_name, int cell_size);
 private:
     int rows;
     int columns;
