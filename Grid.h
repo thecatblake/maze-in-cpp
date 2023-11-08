@@ -22,8 +22,10 @@ public:
     void toPng(char* file_name, int cell_size);
     int rows;
     int columns;
+    Cell* start;
 protected:
     virtual std::string content_of(Cell* cell);
+    virtual std::tuple<int, int, int> backgroundColorFor(Cell* cell);
     std::default_random_engine _generator;
     std::uniform_int_distribution<int> _dist;
 };

@@ -34,3 +34,16 @@ Distances *Distances::pathTo(Cell *cell) {
 
     return breadcrumbs;
 }
+
+std::pair<Cell *, int> Distances::max() {
+    int m_d = 0;
+    auto m_c = root;
+
+    for(auto& [cell, distance] : cells) {
+        if(distance > m_d) {
+            m_c = cell;
+            m_d = distance;
+        }
+    }
+    return std::make_pair(m_c, m_d);
+}

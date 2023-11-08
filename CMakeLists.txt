@@ -17,9 +17,13 @@ add_library(maze
         Distances.h
         DistanceGrid.cpp
         DistanceGrid.h
+        ColoredGrid.cpp
+        ColoredGrid.h
 )
 target_link_libraries(maze libpng.a)
 add_executable(binary_tree_maze binary_tree_maze.cpp)
 target_link_libraries(binary_tree_maze maze)
 add_executable(sidewinder_maze sidewinder_maze.cpp)
 target_link_libraries(sidewinder_maze maze)
+add_executable(colored_maze colored_maze.cpp)
+target_link_libraries(colored_maze maze)

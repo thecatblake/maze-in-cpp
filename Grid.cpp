@@ -72,14 +72,14 @@ std::string Grid::toString() {
     return output;
 }
 
-void png_write_line(png_bytep* row_pointers, int x1, int y1, int x2, int y2) {
+void png_write_line(png_bytep* row_pointers, int x1, int y1, int x2, int y2, std::tuple<int, int, int> color) {
     for(int y=y1; y <= y2; y++) {
         png_bytep row = row_pointers[y];
         for(int x=x1; x <= x2; x++) {
             png_bytep px = &(row[x * 4]);
-            px[0] = 0;
-            px[1] = 0;
-            px[2] = 0;
+            px[0] = std::get<0>(color);
+            px[1] = std::get<1>(color);
+            px[2] = std::get<2>(color);
             px[3] = 255;
         }
     }
@@ -137,14 +137,24 @@ void Grid::toPng(char* file_name, int cell_size) {
         int x2 = (cell->column + 1) * cell_size;
         int y2 = (cell->row + 1) * cell_size;
 
+        auto color = backgroundColorFor(cell);
+        png_write_line(row_pointers, x1, y1, x2, y2, color);
+    }
+
+    for(auto & cell : cells) {
+        int x1 = cell->column * cell_size;
+        int y1 = cell->row * cell_size;
+        int x2 = (cell->column + 1) * cell_size;
+        int y2 = (cell->row + 1) * cell_size;
+
         if(!cell->north)
-            png_write_line(row_pointers, x1, y1, x2, y1);
+            png_write_line(row_pointers, x1, y1, x2, y1, std::make_tuple(0, 0, 0));
         if(!cell->west)
-            png_write_line(row_pointers, x1, y1, x1, y2);
+            png_write_line(row_pointers, x1, y1, x1, y2, std::make_tuple(0, 0, 0));
         if(!cell->linked(cell->east))
-            png_write_line(row_pointers, x2, y1, x2, y2);
+            png_write_line(row_pointers, x2, y1, x2, y2, std::make_tuple(0, 0, 0));
         if(!cell->linked(cell->south))
-            png_write_line(row_pointers, x1, y2, x2, y2);
+            png_write_line(row_pointers, x1, y2, x2, y2, std::make_tuple(0, 0, 0));
     }
 
     png_write_image(png, row_pointers);
@@ -162,4 +172,8 @@ void Grid::toPng(char* file_name, int cell_size) {
 
 std::string Grid::content_of(Cell *cell) {
     return " ";
+}
+
+std::tuple<int, int, int> Grid::backgroundColorFor(Cell *cell) {
+    return std::tuple<int, int, int>();
 }

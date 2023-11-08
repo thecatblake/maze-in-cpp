@@ -16,6 +16,7 @@ public:
     int& operator[](Cell* cell);
     bool calculated(Cell* cell);
     Distances* pathTo(Cell* cell);
+    std::pair<Cell*, int> max();
     std::unordered_map<Cell*, int> cells;
 private:
     Cell* root;

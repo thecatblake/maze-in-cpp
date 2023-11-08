@@ -11,15 +11,17 @@
 int main() {
     DistanceGrid grid(10, 10);
     binary_tree(grid);
-    grid.distances = grid.cells[0]->distances();
 
     char* file_name = "binary_tree_maze.png";
 
     grid.toPng(file_name, 10);
 
-    std::cout << grid.toString() << std::endl;
+    grid.start = grid.getCell(0, 0);
+    grid.distances = grid.start->distances();
+    auto [new_start, distance] = grid.distances->max();
 
-    grid.distances = grid.distances->pathTo(grid.getCell(grid.rows - 1, 0));
+    auto new_distance = new_start->distances();
+    grid.distances = new_distance->pathTo(grid.start);
 
     std::cout << grid.toString() << std::endl;
 }
