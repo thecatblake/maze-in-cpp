@@ -8,7 +8,7 @@
 #include "algorithms.h"
 
 int main() {
-    ColoredGrid grid(50, 50);
+    ColoredGrid grid(10, 10);
     wilson(grid);
 
     grid.start = grid.getCell(grid.rows / 2, grid.columns / 2);

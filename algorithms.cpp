@@ -111,3 +111,48 @@ Grid& wilson(Grid& grid) {
 
     return grid;
 }
+
+Grid& hunt_and_kill(Grid& grid) {
+    std::random_device rd;
+    std::mt19937 g(rd());
+    auto current = grid.randomCell();
+    while (current) {
+        auto neighbors = current->neighbors();
+        std::vector<Cell*> unvisited_neighbors;
+
+        for (auto & neighbor : neighbors) {
+            if(neighbor->links.empty())
+                unvisited_neighbors.push_back(neighbor);
+        }
+
+        if(!unvisited_neighbors.empty()) {
+            std::shuffle(unvisited_neighbors.begin(), unvisited_neighbors.end(), g);
+            auto neighbor = unvisited_neighbors[0];
+            current->link(neighbor);
+            current = neighbor;
+        } else {
+            current = nullptr;
+
+            for (auto & cell : grid.cells) {
+                std::vector<Cell*> visited_neighbors;
+
+                for (auto & neighbor : cell->neighbors()) {
+                    if(!neighbor->links.empty()) {
+                        visited_neighbors.push_back(neighbor);
+                    }
+                }
+
+                if(cell->links.empty() && !visited_neighbors.empty()) {
+                    current = cell;
+                    std::shuffle(visited_neighbors.begin(), visited_neighbors.end(), g);
+                    auto neighbor = visited_neighbors[0];
+
+                    current->link(neighbor);
+                    break;
+                }
+            }
+        }
+    }
+
+    return grid;
+}

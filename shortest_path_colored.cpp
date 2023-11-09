@@ -8,8 +8,8 @@
 #include "algorithms.h"
 
 int main() {
-    ColoredGrid grid(50, 50);
-    aldous_border(grid);
+    ColoredGrid grid(10, 10);
+    wilson(grid);
     grid.start = grid.getCell(0, 0);
     grid.setDistances(grid.start->distances());
     grid.setDistances(grid.distances->pathTo(grid.getCell(grid.rows - 1, grid.columns - 1)));
