@@ -49,3 +49,26 @@ Grid& sidewinder(Grid& grid) {
 
     return grid;
 }
+
+Grid& aldous_border(Grid& grid) {
+    std::random_device r;
+    std::default_random_engine generator(r());
+    std::uniform_int_distribution<int> dist(0, 3);
+
+    auto cell = grid.randomCell();
+    int unvisited = (int)grid.cells.size() - 1;
+
+    while (unvisited > 0) {
+        auto neighbors = cell->neighbors();
+        auto neighbor = neighbors[dist(generator) % neighbors.size()];
+
+        if(neighbor && neighbor->links.empty()) {
+            cell->link(neighbor);
+            unvisited--;
+        }
+
+        cell = neighbor;
+    }
+
+    return grid;
+}

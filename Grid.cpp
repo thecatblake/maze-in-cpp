@@ -175,5 +175,5 @@ std::string Grid::content_of(Cell *cell) {
 }
 
 std::tuple<int, int, int> Grid::backgroundColorFor(Cell *cell) {
-    return std::tuple<int, int, int>();
+    return std::make_tuple(255, 255, 255);
 }
