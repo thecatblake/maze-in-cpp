@@ -77,6 +77,8 @@ Grid& wilson(Grid& grid) {
     std::random_device r;
     std::default_random_engine generator(r());
     std::uniform_int_distribution<int> dist(0, (int)grid.cells.size() - 1);
+    std::random_device rd;
+    std::mt19937 g(rd());
     std::vector<Cell*> unvisited;
     unvisited.reserve(grid.cells.size());
 
@@ -84,20 +86,23 @@ Grid& wilson(Grid& grid) {
         unvisited.push_back(cell);
     }
 
-    auto first = unvisited[dist(generator) % (int)unvisited.size()];
+    std::shuffle(unvisited.begin(), unvisited.end(), rd);
+    auto first = unvisited[0];
     unvisited.erase(std::remove(unvisited.begin(), unvisited.end(), first), unvisited.end());
 
     while(!unvisited.empty()) {
-        auto cell = unvisited[dist(generator) % (int)unvisited.size()];
+        std::shuffle(unvisited.begin(), unvisited.end(), rd);
+        auto cell = unvisited[0];
         std::vector<Cell*> path = {cell};
 
         while(std::find(unvisited.begin(), unvisited.end(), cell) != unvisited.end()) {
             auto neighbors = cell->neighbors();
-            cell = neighbors[dist(generator) % (int)neighbors.size()];
+            std::shuffle(neighbors.begin(), neighbors.end(), rd);
+            cell = neighbors[0];
             auto position = std::find(path.begin(), path.end(), cell);
 
             if(position != path.end()) {
-                path.erase(position, path.end());
+                path.erase(position+1, path.end());
             } else {
                 path.push_back(cell);
             }
