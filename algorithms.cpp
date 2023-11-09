@@ -72,3 +72,42 @@ Grid& aldous_border(Grid& grid) {
 
     return grid;
 }
+
+Grid& wilson(Grid& grid) {
+    std::random_device r;
+    std::default_random_engine generator(r());
+    std::uniform_int_distribution<int> dist(0, (int)grid.cells.size() - 1);
+    std::vector<Cell*> unvisited;
+    unvisited.reserve(grid.cells.size());
+
+    for(auto & cell : grid.cells) {
+        unvisited.push_back(cell);
+    }
+
+    auto first = unvisited[dist(generator) % (int)unvisited.size()];
+    unvisited.erase(std::remove(unvisited.begin(), unvisited.end(), first), unvisited.end());
+
+    while(!unvisited.empty()) {
+        auto cell = unvisited[dist(generator) % (int)unvisited.size()];
+        std::vector<Cell*> path = {cell};
+
+        while(std::find(unvisited.begin(), unvisited.end(), cell) != unvisited.end()) {
+            auto neighbors = cell->neighbors();
+            cell = neighbors[dist(generator) % (int)neighbors.size()];
+            auto position = std::find(path.begin(), path.end(), cell);
+
+            if(position != path.end()) {
+                path.erase(position, path.end());
+            } else {
+                path.push_back(cell);
+            }
+        }
+
+        for(int i=0; i < path.size() - 1; i++) {
+            path[i]->link(path[i + 1]);
+            unvisited.erase(std::remove(unvisited.begin(), unvisited.end(), path[i]), unvisited.end());
+        }
+    }
+
+    return grid;
+}
