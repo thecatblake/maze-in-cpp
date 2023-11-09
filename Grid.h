@@ -20,6 +20,7 @@ public:
     std::vector<Cell*> cells;
     std::string toString();
     void toPng(char* file_name, int cell_size);
+    std::vector<Cell*> deadends();
     int rows;
     int columns;
     Cell* start;

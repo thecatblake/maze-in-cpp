@@ -177,3 +177,14 @@ std::string Grid::content_of(Cell *cell) {
 std::tuple<int, int, int> Grid::backgroundColorFor(Cell *cell) {
     return std::make_tuple(255, 255, 255);
 }
+
+std::vector<Cell*> Grid::deadends() {
+    std::vector<Cell*> ds;
+
+    for(auto & cell : cells) {
+        if(cell->links.size() == 1)
+            ds.push_back(cell);
+    }
+
+    return ds;
+}
