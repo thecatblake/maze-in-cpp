@@ -9,7 +9,7 @@
 
 int main() {
     ColoredGrid grid(50, 50);
-    sidewinder(grid);
+    aldous_border(grid);
 
     grid.start = grid.getCell(grid.rows / 2, grid.columns / 2);
     grid.setDistances(grid.start->distances());
