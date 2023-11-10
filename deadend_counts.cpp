@@ -7,15 +7,17 @@
 #include <iostream>
 
 int main() {
-    std::string f_names[] = {"binary_tree", "sidewinder", "Aldous border", "Wilson", "hunt-and-kill"};
-    Grid& (* algorithms[])(Grid&) = {binary_tree, sidewinder, aldous_border, wilson, hunt_and_kill};
+    std::string f_names[] = {"binary_tree", "sidewinder", "Aldous border", "Wilson", "hunt-and-kill", "recursive-backtracking"};
+    Grid& (* algorithms[])(Grid&) = {binary_tree, sidewinder, aldous_border, wilson, hunt_and_kill,
+                                     recursive_backtracker};
+    int num_algos = 6;
 
     int tries = 100;
     int size = 20;
 
-    double averages[5];
+    double averages[num_algos];
 
-    for(int i=0; i < 5; i++) {
+    for(int i=0; i < num_algos; i++) {
         auto algorithm = algorithms[i];
         std::cout << "running " << f_names[i] << "..." << std::endl;
 
@@ -30,7 +32,7 @@ int main() {
         averages[i] = (double)std::reduce(dead_counts.begin(), dead_counts.end()) / (double)dead_counts.size();
     }
 
-    for(int i=0; i < 5; i++) {
+    for(int i=0; i < num_algos; i++) {
         std::cout << f_names[i] << ":\t" << averages[i] << "/" << size * size << "\t" << 100 * (int)averages[i] / (size*size) << "% (deadends/cells)" << std::endl;
     }
 }
