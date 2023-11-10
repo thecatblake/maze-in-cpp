@@ -12,5 +12,6 @@ Grid& sidewinder(Grid& grid);
 Grid& aldous_border(Grid& grid);
 Grid& wilson(Grid& grid);
 Grid& hunt_and_kill(Grid& grid);
+Grid& recursive_backtracker(Grid& grid);
 
 #endif //MAZE_IN_CPP_ALGORITHMS_H

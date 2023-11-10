@@ -4,6 +4,8 @@
 
 #include "algorithms.h"
 
+#include <stack>
+
 Grid& binary_tree(Grid& grid) {
     std::random_device r;
     std::default_random_engine generator(r());
@@ -156,6 +158,38 @@ Grid& hunt_and_kill(Grid& grid) {
                     break;
                 }
             }
+        }
+    }
+
+    return grid;
+}
+
+Grid& recursive_backtracker(Grid& grid) {
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::stack<Cell*> stack;
+    if(grid.start)
+        stack.push(grid.start);
+    else
+        stack.push(grid.randomCell());
+
+    while(!stack.empty()) {
+        auto current = stack.top();
+        std::vector<Cell*> unvisited_neighbors;
+        auto neighbors = current->neighbors();
+
+        for(auto & neighbor : neighbors) {
+            if(neighbor->links.empty())
+                unvisited_neighbors.push_back(neighbor);
+        }
+
+        if(unvisited_neighbors.empty())
+            stack.pop();
+        else {
+            std::shuffle(unvisited_neighbors.begin(), unvisited_neighbors.end(), rd);
+            auto neighbor = unvisited_neighbors[0];
+            current->link(neighbor);
+            stack.push(neighbor);
         }
     }
 

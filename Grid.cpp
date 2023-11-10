@@ -7,7 +7,8 @@
 Grid::Grid(int rows, int columns):
     rows(rows),
     columns(columns),
-    _dist(std::max(rows, columns)) {
+    _dist(std::max(rows, columns)),
+    start(nullptr){
     cells.resize(columns * rows);
     for(int i=0; i < cells.size(); i++) {
         int column = i % rows;

@@ -13,6 +13,8 @@ void ColoredGrid::setDistances(Distances *ds) {
 }
 
 std::tuple<int, int, int> ColoredGrid::backgroundColorFor(Cell *cell) {
+    if(distances->cells.find(cell) == distances->cells.end())
+        return std::make_tuple(255, 255, 255);
     int distance = distances->cells[cell];
     double intensity = (double)(maximum - distance) / maximum;
     int dark = (int)floor((255 * intensity));
