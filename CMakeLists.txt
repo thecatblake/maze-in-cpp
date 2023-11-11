@@ -19,6 +19,10 @@ add_library(maze
         DistanceGrid.h
         ColoredGrid.cpp
         ColoredGrid.h
+        Mask.cpp
+        Mask.h
+        MaskGrid.cpp
+        MaskGrid.h
 )
 target_link_libraries(maze libpng.a)
 add_executable(binary_tree_maze binary_tree_maze.cpp)
@@ -41,3 +45,5 @@ add_executable(recursive_backtracker_maze recursive_backtracker_maze.cpp)
 target_link_libraries(recursive_backtracker_maze maze)
 add_executable(longest_path_colored longest_path_colored.cpp)
 target_link_libraries(longest_path_colored maze)
+add_executable(mask_maze mask_maze.cpp)
+target_link_libraries(mask_maze maze)

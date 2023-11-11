@@ -25,6 +25,7 @@ public:
     int columns;
     Cell* start;
 protected:
+    void prepareGrid();
     virtual std::string content_of(Cell* cell);
     virtual std::tuple<int, int, int> backgroundColorFor(Cell* cell);
     std::default_random_engine _generator;

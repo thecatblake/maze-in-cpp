@@ -9,20 +9,7 @@ Grid::Grid(int rows, int columns):
     columns(columns),
     _dist(std::max(rows, columns)),
     start(nullptr){
-    cells.resize(columns * rows);
-    for(int i=0; i < cells.size(); i++) {
-        int column = i % rows;
-        int row = i / rows;
-        Cell* cell = new Cell(row, column);
-        cells[i] = cell;
-    }
-
-    for(auto & cell : cells) {
-        cell->north = getCell(cell->row - 1, cell->column);
-        cell->south = getCell(cell->row + 1, cell->column);
-        cell->west = getCell(cell->row, cell->column - 1);
-        cell->east = getCell(cell->row, cell->column + 1);
-    }
+    prepareGrid();
 }
 
 Grid::~Grid() {
@@ -188,4 +175,21 @@ std::vector<Cell*> Grid::deadends() {
     }
 
     return ds;
+}
+
+void Grid::prepareGrid() {
+    cells.resize(columns * rows);
+    for(int i=0; i < cells.size(); i++) {
+        int column = i % rows;
+        int row = i / rows;
+        Cell* cell = new Cell(row, column);
+        cells[i] = cell;
+    }
+
+    for(auto & cell : cells) {
+        cell->north = getCell(cell->row - 1, cell->column);
+        cell->south = getCell(cell->row + 1, cell->column);
+        cell->west = getCell(cell->row, cell->column - 1);
+        cell->east = getCell(cell->row, cell->column + 1);
+    }
 }
