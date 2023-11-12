@@ -10,10 +10,12 @@
 
 class MaskGrid : public Grid {
 public:
-    MaskGrid(Mask* mask);
+    MaskGrid(std::unique_ptr<Mask>& mask);
     Cell* getCell(int row, int column);
     Cell* randomCell();
-    Mask* mask;
+    static std::unique_ptr<MaskGrid> loadFile(const std::string& path);
+    static std::unique_ptr<MaskGrid> loadPng(const std::string& path);
+    std::unique_ptr<Mask> mask;
 protected:
     void prepareGrid();
 };

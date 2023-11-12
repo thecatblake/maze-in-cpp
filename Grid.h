@@ -16,7 +16,7 @@ public:
     ~Grid();
     Cell* operator [](std::pair<int, int> index);
     Cell* getCell(int row, int column);
-    Cell* randomCell();
+    virtual Cell* randomCell();
     std::vector<Cell*> cells;
     std::string toString();
     void toPng(char* file_name, int cell_size);

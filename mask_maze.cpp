@@ -8,16 +8,14 @@
 #include "algorithms.h"
 
 int main() {
-    Mask mask(5, 5);
+    //auto mask = std::make_unique<Mask>(5, 5);
+    //*(*mask)(0, 0) = false;
+    //MaskGrid grid(mask);
+    auto grid = MaskGrid::loadPng("/Users/ryousukekaga/repositories/maze-in-cpp/X_maze.png");
 
-    *mask(0, 0) = false;
-    *mask(2, 2) = false;
-    *mask(4, 4) = false;
+    recursive_backtracker(*grid);
 
-    std::cout << mask.bits[1] << std::endl;
+    grid->toPng("mask_maze.png", 10);
 
-    MaskGrid grid(&mask);
-    recursive_backtracker(grid);
-
-    std::cout << grid.toString() << std::endl;
+    std::cout << grid->toString() << std::endl;
 }

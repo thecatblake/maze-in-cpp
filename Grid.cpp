@@ -47,10 +47,10 @@ std::string Grid::toString() {
         for(int column=0; column < columns; column++) {
             Cell* cell = getCell(row, column);
             std::string body = " " + content_of(cell) + " ";
-            std::string east_boundary = cell->linked(cell->east) ? " " : "|";
+            std::string east_boundary = cell && cell->linked(cell->east) ? " " : "|";
             top += body + east_boundary;
 
-            std::string south_boundary = cell->linked(cell->south) ? "   " : "---";
+            std::string south_boundary = cell && cell->linked(cell->south) ? "   " : "---";
             bottom += south_boundary + "+";
         }
         output += top + "\n";
@@ -112,14 +112,15 @@ void Grid::toPng(char* file_name, int cell_size) {
         png_bytep row = row_pointers[y];
         for(int x = 0; x < img_width; x++) {
             png_bytep px = &(row[x * 4]);
-            px[0] = 255;
-            px[1] = 255;
-            px[2] = 255;
+            px[0] = 0;
+            px[1] = 0;
+            px[2] = 0;
             px[3] = 255;
         }
     }
 
     for(auto & cell : cells) {
+        if(!cell) continue;
         int x1 = cell->column * cell_size;
         int y1 = cell->row * cell_size;
         int x2 = (cell->column + 1) * cell_size;
@@ -130,6 +131,7 @@ void Grid::toPng(char* file_name, int cell_size) {
     }
 
     for(auto & cell : cells) {
+        if(!cell) continue;
         int x1 = cell->column * cell_size;
         int y1 = cell->row * cell_size;
         int x2 = (cell->column + 1) * cell_size;
