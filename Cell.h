@@ -15,11 +15,11 @@ class Distances;
 class Cell {
 public:
     Cell(int row, int column);
-    Cell* link(Cell* cell, bool bidi=true);
-    Cell* unlink(Cell* cell, bool bidi=true);
-    bool linked(Cell* cell);
+    virtual Cell* link(Cell* cell, bool bidi=true);
+    virtual Cell* unlink(Cell* cell, bool bidi=true);
+    virtual bool linked(Cell* cell);
     Distances* distances();
-    std::vector<Cell*> neighbors();
+    virtual std::vector<Cell*> neighbors();
     std::set<Cell*> links;
     Cell* north;
     Cell* south;

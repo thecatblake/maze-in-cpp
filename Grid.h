@@ -10,12 +10,14 @@
 #include "Cell.h"
 #include <png.h>
 
+void png_write_line(png_bytep* row_pointers, int x1, int y1, int x2, int y2, std::tuple<int, int, int> color);
+
 class Grid {
 public:
     Grid(int rows, int columns);
     ~Grid();
     Cell* operator [](std::pair<int, int> index);
-    Cell* getCell(int row, int column);
+    virtual Cell* getCell(int row, int column);
     virtual Cell* randomCell();
     std::vector<Cell*> cells;
     std::string toString();

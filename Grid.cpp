@@ -61,8 +61,13 @@ std::string Grid::toString() {
 }
 
 void png_write_line(png_bytep* row_pointers, int x1, int y1, int x2, int y2, std::tuple<int, int, int> color) {
-    for(int y=y1; y <= y2; y++) {
-        png_bytep row = row_pointers[y];
+    if(y1 == y2) {
+        png_bytep row = row_pointers[y1];
+
+        if (x1 >= x2) {
+            std::swap(y1, y2);
+            std::swap(x1, x2);
+        }
         for(int x=x1; x <= x2; x++) {
             png_bytep px = &(row[x * 4]);
             px[0] = std::get<0>(color);
@@ -70,6 +75,38 @@ void png_write_line(png_bytep* row_pointers, int x1, int y1, int x2, int y2, std
             px[2] = std::get<2>(color);
             px[3] = 255;
         }
+
+        return;
+    }
+
+    if (y1 >= y2) {
+        std::swap(y1, y2);
+        std::swap(x1, x2);
+    }
+
+    if(x1 == x2)  {
+        for(int y=y1; y <= y2; y++) {
+            png_bytep row = row_pointers[y];
+
+            png_bytep px = &(row[x1 * 4]);
+            px[0] = std::get<0>(color);
+            px[1] = std::get<1>(color);
+            px[2] = std::get<2>(color);
+            px[3] = 255;
+        }
+
+        return;
+    }
+
+    double s = (y1 - y2) / (double)(x1 - x2);
+    for(int y=y1; y <= y2; y++) {
+        png_bytep row = row_pointers[y];
+        int x = (int)((y - y1) / s + x1);
+        png_bytep px = &(row[x * 4]);
+        px[0] = std::get<0>(color);
+        px[1] = std::get<1>(color);
+        px[2] = std::get<2>(color);
+        px[3] = 255;
     }
 }
 

@@ -23,6 +23,10 @@ add_library(maze
         Mask.h
         MaskGrid.cpp
         MaskGrid.h
+        PolarGrid.cpp
+        PolarGrid.h
+        PolarCell.cpp
+        PolarCell.h
 )
 target_link_libraries(maze libpng.a)
 add_executable(binary_tree_maze binary_tree_maze.cpp)
@@ -47,3 +51,5 @@ add_executable(longest_path_colored longest_path_colored.cpp)
 target_link_libraries(longest_path_colored maze)
 add_executable(mask_maze mask_maze.cpp)
 target_link_libraries(mask_maze maze)
+add_executable(polar_grid_maze polar_grid_maze.cpp)
+target_link_libraries(polar_grid_maze maze)
