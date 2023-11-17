@@ -3,6 +3,7 @@
 //
 
 #include "Grid.h"
+#include <SDL.h>
 
 Grid::Grid(int rows, int columns):
     rows(rows),
@@ -231,4 +232,87 @@ void Grid::prepareGrid() {
         cell->west = getCell(cell->row, cell->column - 1);
         cell->east = getCell(cell->row, cell->column + 1);
     }
+}
+
+void Grid::show(int cell_size) {
+    int width = cell_size * columns;
+    int height = cell_size * rows;
+    bool running = true;
+
+     SDL_Window* window = SDL_CreateWindow(
+            "maze",
+            100,
+            100,
+            width,
+            height,
+            0
+    );
+
+    if (!window) {
+        SDL_Log("Failed to create window: %s", SDL_GetError());
+        return;
+    }
+
+    SDL_Renderer* render = SDL_CreateRenderer(
+            window,
+            -1,
+            SDL_RENDERER_ACCELERATED
+    );
+
+    SDL_RenderClear(render);
+
+    for(auto & cell : cells) {
+        if(!cell) continue;
+        int x1 = cell->column * cell_size;
+        int y1 = cell->row * cell_size;
+        int x2 = (cell->column + 1) * cell_size;
+        int y2 = (cell->row + 1) * cell_size;
+
+        auto color = backgroundColorFor(cell);
+        SDL_SetRenderDrawColor(render, std::get<0>(color), std::get<1>(color), std::get<2>(color), 255);
+        SDL_Rect rect;
+        rect.x = x1;
+        rect.y = y1;
+        rect.w = x2;
+        rect.h = y2;
+        SDL_RenderFillRect(render, &rect);
+    }
+
+    for(auto & cell : cells) {
+        if(!cell) continue;
+        int x1 = cell->column * cell_size;
+        int y1 = cell->row * cell_size;
+        int x2 = (cell->column + 1) * cell_size;
+        int y2 = (cell->row + 1) * cell_size;
+
+        SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+        if(!cell->north)
+            SDL_RenderDrawLine(render, x1, y1, x2, y1);
+        if(!cell->west)
+            SDL_RenderDrawLine(render, x1, y1, x1, y2);
+        if(!cell->linked(cell->east))
+            SDL_RenderDrawLine(render, x2, y1, x2, y2);
+        if(!cell->linked(cell->south))
+            SDL_RenderDrawLine(render, x1, y2, x2, y2);
+    }
+
+    SDL_RenderPresent(render);
+
+    SDL_Event event;
+
+    while(running) {
+        while (SDL_PollEvent(&event)) {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+            }
+        }
+
+    }
+
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(render);
+    SDL_Quit();
 }

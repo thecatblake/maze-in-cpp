@@ -6,6 +6,7 @@
 #include "PolarCell.h"
 #include <iostream>
 #include <cmath>
+#include <SDL.h>
 
 void PolarGrid::toPng(char *file_name, int cell_size) {
     int img_width = cell_size * columns;
@@ -175,4 +176,137 @@ void PolarGrid::setDistances(Distances *ds) {
     auto [m_c, m_d] = distances->max();
     farthest = m_c;
     maximum = m_d;
+}
+
+void DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius)
+{
+    const int32_t diameter = (radius * 2);
+
+    int32_t x = (radius - 1);
+    int32_t y = 0;
+    int32_t tx = 1;
+    int32_t ty = 1;
+    int32_t error = (tx - diameter);
+
+    while (x >= y)
+    {
+        //  Each of the following renders an octant of the circle
+        SDL_RenderDrawPoint(renderer, centreX + x, centreY - y);
+        SDL_RenderDrawPoint(renderer, centreX + x, centreY + y);
+        SDL_RenderDrawPoint(renderer, centreX - x, centreY - y);
+        SDL_RenderDrawPoint(renderer, centreX - x, centreY + y);
+        SDL_RenderDrawPoint(renderer, centreX + y, centreY - x);
+        SDL_RenderDrawPoint(renderer, centreX + y, centreY + x);
+        SDL_RenderDrawPoint(renderer, centreX - y, centreY - x);
+        SDL_RenderDrawPoint(renderer, centreX - y, centreY + x);
+
+        if (error <= 0)
+        {
+            ++y;
+            error += ty;
+            ty += 2;
+        }
+
+        if (error > 0)
+        {
+            --x;
+            tx += 2;
+            error += (tx - diameter);
+        }
+    }
+}
+
+void PolarGrid::show(int cell_size) {
+    int img_size = 2 * rows * cell_size;
+    bool running = true;
+
+    SDL_Window* window = SDL_CreateWindow(
+            "maze",
+            100,
+            100,
+            img_size,
+            img_size,
+            0
+    );
+
+    if (!window) {
+        SDL_Log("Failed to create window: %s", SDL_GetError());
+        return;
+    }
+
+    SDL_Renderer* render = SDL_CreateRenderer(
+            window,
+            -1,
+            SDL_RENDERER_ACCELERATED
+    );
+
+    SDL_RenderClear(render);
+
+    SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+    SDL_Rect fill;
+    fill.x = 0;
+    fill.y = 0;
+    fill.w = img_size;
+    fill.h = img_size;
+    SDL_RenderFillRect(render, &fill);
+
+    int center = img_size / 2;
+    for(auto & row : cells) {
+        for(auto & cell : row) {
+            if(cell->row == 0) continue;
+            double theta = 2 * M_PI / (int)cells[cell->row].size();
+            double inner_radius = cell->row * cell_size;
+            double outer_radius = (cell->row + 1) * cell_size;
+            double theta_ccw = cell->column * theta;
+            double theta_cw = (cell->column + 1) * theta;
+
+            auto ax = (float)(center + inner_radius * std::cos(theta_ccw));
+            auto ay = (float)(img_size - center + inner_radius * std::sin(theta_ccw));
+            auto bx = (float)(center + (int)(outer_radius * std::cos(theta_ccw)));
+            auto by = (float)(img_size - center + (int)(outer_radius * std::sin(theta_ccw)));
+            auto cx = (float)(center + (int)(inner_radius * std::cos(theta_cw)));
+            auto cy =  (float)(center + (int)(inner_radius * std::sin(theta_cw)));
+            auto dx = (float)(center + (int)(outer_radius * std::cos(theta_cw)));
+            auto dy = (float)(center + (int)(outer_radius * std::sin(theta_cw)));
+
+            SDL_Vertex vertices[] = {
+                    {{ax, ay}, {255, 255, 255, 255}, {0}},
+                    {{bx, by}, {255, 255, 255, 255}, {0}},
+                    {{cx, cy}, {255, 255, 255, 255}, {0}},
+                    {{dx, dy}, {255, 255, 255, 255}, {0}}
+            };
+
+            SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+            SDL_RenderGeometry(render, nullptr, vertices, 4, nullptr, 0);
+
+            SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+            if(!cell->linked(cell->inward))
+                SDL_RenderDrawLine(render, (int)ax, (int)ay, (int)cx, (int)cy);
+            if(!cell->linked(cell->cw))
+                SDL_RenderDrawLine(render, (int)cx, (int)cy, (int)dx, (int)dy);
+        }
+    }
+
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+    DrawCircle(render, center, center, center);
+
+    SDL_RenderPresent(render);
+
+    SDL_Event event;
+
+    while(running) {
+        while (SDL_PollEvent(&event)) {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+            }
+        }
+
+    }
+
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(render);
+    SDL_Quit();
 }

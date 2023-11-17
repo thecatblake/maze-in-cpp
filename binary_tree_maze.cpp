@@ -24,4 +24,6 @@ int main() {
     grid.distances = new_distance->pathTo(grid.start);
 
     std::cout << grid.toString() << std::endl;
+
+    grid.show(50);
 }

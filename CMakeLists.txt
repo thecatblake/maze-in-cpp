@@ -3,6 +3,8 @@ project(maze_in_cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+
 include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
 
@@ -28,7 +30,7 @@ add_library(maze
         PolarCell.cpp
         PolarCell.h
 )
-target_link_libraries(maze libpng.a)
+target_link_libraries(maze libpng.a SDL2::SDL2)
 add_executable(binary_tree_maze binary_tree_maze.cpp)
 target_link_libraries(binary_tree_maze maze)
 add_executable(sidewinder_maze sidewinder_maze.cpp)

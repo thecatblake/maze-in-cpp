@@ -29,4 +29,6 @@ int main() {
     s_grid.setDistances(s_grid.distances->pathTo(s_grid.getCell(s_grid.rows - 1, s_grid.columns - 1)));
 
     s_grid.toPng("wilson_shortest_path.png", 10);
+
+    s_grid.show(20);
 }

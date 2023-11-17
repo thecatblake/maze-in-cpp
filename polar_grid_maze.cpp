@@ -6,10 +6,8 @@
 #include "algorithms.h"
 
 int main() {
-    PolarGrid grid(10);
+    PolarGrid grid(20);
     recursive_backtracker(grid);
 
-    grid.setDistances(grid.cells[0][0]->distances());
-
-    grid.toPng("polar_grid_maze.png", 100);
+    grid.show(20);
 }

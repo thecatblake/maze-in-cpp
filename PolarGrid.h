@@ -16,6 +16,7 @@ public:
     PolarCell* randomCell();
     std::vector<std::vector<PolarCell*>> cells;
     void toPng(char* file_name, int cell_size);
+    void show(int cell_size);
     int rows;
     PolarCell* start;
 
