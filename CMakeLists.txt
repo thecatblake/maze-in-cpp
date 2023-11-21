@@ -29,6 +29,10 @@ add_library(maze
         PolarGrid.h
         PolarCell.cpp
         PolarCell.h
+        HexCell.cpp
+        HexCell.h
+        HexGrid.cpp
+        HexGrid.h
 )
 target_link_libraries(maze libpng.a SDL2::SDL2)
 add_executable(binary_tree_maze binary_tree_maze.cpp)
@@ -55,3 +59,5 @@ add_executable(mask_maze mask_maze.cpp)
 target_link_libraries(mask_maze maze)
 add_executable(polar_grid_maze polar_grid_maze.cpp)
 target_link_libraries(polar_grid_maze maze)
+add_executable(hex_grid_maze hex_grid_maze.cpp)
+target_link_libraries(hex_grid_maze maze)
